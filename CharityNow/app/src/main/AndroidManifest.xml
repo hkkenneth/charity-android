@@ -36,6 +36,7 @@
                 <category android:name="com.winginno.charitynow" />
              </intent-filter>
          </receiver>
+         <service android:name=".GcmIntentService" />
     </application>
 
 </manifest>
