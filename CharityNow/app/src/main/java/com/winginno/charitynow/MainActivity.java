@@ -225,6 +225,7 @@ public class MainActivity extends Activity {
             Log.i(TAG, "App version changed.");
             return "";
         }
+        Log.i(TAG, "Registration id is registrationId: " + registrationId);
         return registrationId;
     }
 

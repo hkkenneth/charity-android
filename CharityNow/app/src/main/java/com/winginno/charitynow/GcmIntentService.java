@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.net.Uri;
 
 /**
  * This {@code IntentService} does the actual handling of the GCM message.
@@ -37,6 +38,14 @@ import android.util.Log;
  */
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
+
+    public static final String PROPERTY_TITLE = "title";
+    public static final String PROPERTY_ORGANIZATION_NAME = "orgName";
+    public static final String PROPERTY_DESCRIPTION = "description";
+    public static final String PROPERTY_ORGANIZATION_LINK = "orgLink";
+
+
+
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
 
@@ -61,23 +70,25 @@ public class GcmIntentService extends IntentService {
              * not interested in, or that you don't recognize.
              */
             if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                sendNotification("Send error: " + extras.toString());
+                // sendNotification("Send error: " + extras.toString());
+                Log.i(TAG, "Send error: " + extras.toString());
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
-                sendNotification("Deleted messages on server: " + extras.toString());
+                // sendNotification("Deleted messages on server: " + extras.toString());
+                Log.i(TAG, "Deleted messages on server: " + extras.toString());
             // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 // This loop represents the service doing some work.
-                for (int i = 0; i < 5; i++) {
-                    Log.i(TAG, "Working... " + (i + 1)
-                            + "/5 @ " + SystemClock.elapsedRealtime());
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                    }
-                }
-                Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
+                // for (int i = 0; i < 5; i++) {
+                //     Log.i(TAG, "Working... " + (i + 1)
+                //             + "/5 @ " + SystemClock.elapsedRealtime());
+                //     try {
+                //         Thread.sleep(5000);
+                //     } catch (InterruptedException e) {
+                //     }
+                // }
+                // Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
-                sendNotification("Received: " + extras.toString());
+                sendNotification(extras);
                 Log.i(TAG, "Received: " + extras.toString());
             }
         }
@@ -88,21 +99,30 @@ public class GcmIntentService extends IntentService {
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.
-    private void sendNotification(String msg) {
+    private void sendNotification(Bundle extras) {
         Log.i(TAG, "GcmIntentService.sendNotification");
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        // PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+        //         new Intent(this, MainActivity.class), 0);
+        Intent openUrlIntent = new Intent(Intent.ACTION_VIEW);
+        openUrlIntent.setData(Uri.parse((String) extras.get(PROPERTY_ORGANIZATION_LINK)));
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), 0);
+            openUrlIntent, 0);
+
+
+        String title = (String) extras.get(PROPERTY_TITLE);
+        String msg = (String) extras.get(PROPERTY_ORGANIZATION_NAME) + " " + (String) extras.get(PROPERTY_DESCRIPTION);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.ic_stat_gcm)
-            .setContentTitle("GCM Notification from Charity Now")
+            .setContentTitle(title)
             .setStyle(new NotificationCompat.BigTextStyle()
             .bigText(msg))
-            .setContentText(msg);
+            .setContentText(msg)
+            .setAutoCancel(true);
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
