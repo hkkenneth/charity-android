@@ -10,6 +10,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -197,6 +198,9 @@ public class MainActivity extends Activity {
             }.execute(null, null, null);
         } else if (view == findViewById(R.id.clear)) {
             mDisplay.setText("");
+        } else if (view == findViewById(R.id.btn_feedback_trigger)) {
+            Intent intent = new Intent(context, FeedbackActivity.class);
+            startActivity(intent);
         }
     }
 

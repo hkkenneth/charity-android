@@ -2,11 +2,22 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             xmlns:tools="http://schemas.android.com/tools"
-            tools:context=".MainActivity">
+            xmlns:bootstrap="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout android:layout_width="fill_parent"
                   android:layout_height="fill_parent"
                   android:orientation="vertical">
+        <!-- basic button -->
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/btn_feedback_trigger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Open Feedback Form"
+            android:onClick="onClick"
+            bootstrap:bb_icon_right="fa-android"
+            bootstrap:bb_type="success"
+        />
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
