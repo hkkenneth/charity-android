@@ -56,17 +56,21 @@ public class MainActivity extends Activity {
         context = getApplicationContext();
 
         // Check device for Play Services APK.
-        if (checkPlayServices()) {
-            // If this check succeeds, proceed with normal processing.
-            // Otherwise, prompt user to get valid Play Services APK.
-            gcm = GoogleCloudMessaging.getInstance(this);
-            regid = getRegistrationId(context);
+        // if (checkPlayServices()) {
+        //     // If this check succeeds, proceed with normal processing.
+        //     // Otherwise, prompt user to get valid Play Services APK.
+        //     gcm = GoogleCloudMessaging.getInstance(this);
+        //     regid = getRegistrationId(context);
 
-            if (regid.isEmpty()) {
-                registerInBackground();
-            }
-        } else {
-            Log.i(TAG, "No valid Google Play Services APK found.");
+        //     if (regid.isEmpty()) {
+        //         registerInBackground();
+        //     }
+        // } else {
+        //     Log.i(TAG, "No valid Google Play Services APK found.");
+        // }
+
+        if (!DataFetchTask.isActive()) {
+            DataFetchTask.create();
         }
     }
 
@@ -97,7 +101,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        checkPlayServices();
+        // checkPlayServices();
+        if (!DataFetchTask.isActive()) {
+            DataFetchTask.create();
+        }
     }
 
     /**

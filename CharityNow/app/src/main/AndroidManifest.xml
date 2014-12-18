@@ -42,6 +42,7 @@
                 <category android:name="com.winginno.charitynow" />
              </intent-filter>
          </receiver>
+         <receiver android:name=".DataFetchTaskReceiver"></receiver>
          <service android:name=".GcmIntentService" />
     </application>
 
