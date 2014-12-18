@@ -43,6 +43,7 @@
              </intent-filter>
          </receiver>
          <receiver android:name=".DataFetchTaskReceiver"></receiver>
+         <receiver android:name=".NotificationTaskReceiver"></receiver>
          <service android:name=".GcmIntentService" />
     </application>
 

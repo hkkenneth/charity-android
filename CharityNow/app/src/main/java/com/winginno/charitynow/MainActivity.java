@@ -72,6 +72,9 @@ public class MainActivity extends Activity {
         if (!DataFetchTask.isActive()) {
             DataFetchTask.create();
         }
+        if (!NotificationTask.isActive()) {
+            NotificationTask.create();
+        }
     }
 
 
@@ -104,6 +107,9 @@ public class MainActivity extends Activity {
         // checkPlayServices();
         if (!DataFetchTask.isActive()) {
             DataFetchTask.create();
+        }
+        if (!NotificationTask.isActive()) {
+            NotificationTask.create();
         }
     }
 
