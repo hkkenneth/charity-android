@@ -54,7 +54,7 @@ public class NotificationTaskReceiver extends BroadcastReceiver {
                 PendingIntent contentIntent = PendingIntent.getActivity(appContext, REQUEST_CODE, openUrlIntent, 0);
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(appContext)
-                    .setSmallIcon(R.drawable.ic_stat_gcm)
+                    .setSmallIcon(R.drawable.ic_noti)
                     .setContentTitle(title)
                     .setStyle(new NotificationCompat.BigTextStyle()
                     .bigText(title))
