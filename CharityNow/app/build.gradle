@@ -24,4 +24,5 @@ dependencies {
     compile 'com.google.android.gms:play-services:6.1.+'
     compile 'com.beardedhen:androidbootstrap:+'
     compile 'com.mcxiaoke.volley:library:1.0.+'
+    compile 'com.google.code.gson:gson:2.3.1'
 }
