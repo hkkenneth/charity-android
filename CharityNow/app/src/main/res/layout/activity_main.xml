@@ -18,6 +18,26 @@
             bootstrap:bb_icon_right="fa-android"
             bootstrap:bb_type="success"
         />
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/btn_api_trigger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Fetch API"
+            android:onClick="onClick"
+            bootstrap:bb_icon_right="fa-android"
+            bootstrap:bb_type="success"
+        />
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/btn_api_test_trigger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Fetch API Test"
+            android:onClick="onClick"
+            bootstrap:bb_icon_right="fa-android"
+            bootstrap:bb_type="success"
+        />
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,6 +64,11 @@
                 android:id="@+id/display"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
+
+        <ListView
+            android:id="@+id/event_listview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

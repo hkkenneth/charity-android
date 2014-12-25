@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -18,11 +19,41 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
+import java.text.SimpleDateFormat;
+import java.text.ParsePosition;
+import java.util.Locale;
+import java.util.Date;
+
+import android.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+
+import java.util.ArrayList;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.Response;
+import com.android.volley.Response.Listener;
+import com.android.volley.toolbox.Volley;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
 
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -210,10 +241,116 @@ public class MainActivity extends Activity {
                 }
             }.execute(null, null, null);
         } else if (view == findViewById(R.id.clear)) {
-            mDisplay.setText("");
+            final ArrayList<String> list = new ArrayList<String>();
+
+            for (Event e : EventsFactory.getEvents()) {
+                if ((e.getStartDate() != null) && (e.getStartDate().before(new Date()))) {
+                    continue;
+                }
+                Log.i(TAG, e.getName());
+                Log.i(TAG, e.getMembership());
+
+                list.add(e.getName());
+            }
+
+            final ListView listview = (ListView) findViewById(R.id.event_listview);
+
+            final ArrayAdapter<Event> adapter = new EventViewAdapter(this, android.R.layout.simple_list_item_1, EventsFactory.getEvents());
+            listview.setAdapter(adapter);
+
+            final Context activityContext = context;
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+              @Override
+              public void onItemClick(AdapterView<?> parent, final View view,
+                  int position, long id) {
+
+                Toast.makeText(activityContext, "hi", Toast.LENGTH_SHORT).show();
+              }
+
+            });
+
+            listview.requestLayout();
         } else if (view == findViewById(R.id.btn_feedback_trigger)) {
             Intent intent = new Intent(context, FeedbackActivity.class);
             startActivity(intent);
+        } else if (view == findViewById(R.id.btn_api_trigger)) {
+            final Activity activity = this;
+
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url ="https://script.googleusercontent.com/a/macros/9gag.com/echo?user_content_key=5rB_V-GfLXa_VleYhJ17wJFhHzV7acDoGNlscBb4syuXE3rCLBGjRr4GTzZylfoFZxy1evj789I8hkXEF2MovbOq8QdZwM4wOJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMi80zadyHLKAt-QELwJMLee8rPozBcotHtMyUQ50rEcTzW_eLHFbxIysVmuTfZaYEmUf1nKd3HdDN-fqX8Tw_b4mIOSv_1lOby1QSCbpxgpH5ispxt-K_YnyPKHFW471ddrx5_-y6IJwMC8qrsYZYetKv-L8akWNg7RE4Wg6mM2v8PXHli4Hd-rVpARzRnnDp&lib=M0klXLQOsKcIM4m86X8_CevqWUX6-vu4W";
+            JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    mDisplay.setText("Response: " + response.toString().substring(0,300));
+
+                    NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+                    try {
+                        JSONArray values = response.getJSONArray("od1");
+                        for(int i = 0 ; i < values.length(); i++) {
+                            JSONObject obj = values.getJSONObject(i);
+                            Log.i(TAG, obj.getString("Headline"));
+                            String title = obj.getString("Headline");
+                            String notiUrl = obj.getString("Media_Caption");
+                            String startDate = obj.getString("Start_Date");
+                            ParsePosition pp = new ParsePosition(0);
+                            Date eventDate = sdf.parse(startDate, pp);
+                            // Log.i(TAG, new Integer(pp.getIndex()).toString());
+                            // Log.i(TAG, new Integer(pp.getErrorIndex()).toString());
+                            if ((eventDate != null) && (eventDate.before(new Date()))) {
+                                continue;
+                            }
+
+                            Intent openUrlIntent = new Intent(Intent.ACTION_VIEW);
+                            openUrlIntent.setData(Uri.parse(notiUrl));
+                            PendingIntent contentIntent = PendingIntent.getActivity(activity, 0, openUrlIntent, 0);
+
+                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(activity)
+                                .setSmallIcon(R.drawable.ic_noti)
+                                .setContentTitle(title)
+                                .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(title))
+                                .setContentText(title)
+                                .setAutoCancel(true);
+
+                            mBuilder.setContentIntent(contentIntent);
+                            mNotificationManager.notify(GcmIntentService.NOTIFICATION_ID + i, mBuilder.build());
+                        }
+                    } catch (JSONException e) {
+                        Log.i(TAG, "json exception");
+                    }
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    mDisplay.setText("That didn't work!");
+                }
+            });
+            // Add the request to the RequestQueue.
+            queue.add(jsObjRequest);
+        } else if (view == findViewById(R.id.btn_api_test_trigger)) {
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url ="https://script.googleusercontent.com/a/macros/9gag.com/echo?user_content_key=5rB_V-GfLXa_VleYhJ17wJFhHzV7acDoGNlscBb4syuXE3rCLBGjRr4GTzZylfoFZxy1evj789I8hkXEF2MovbOq8QdZwM4wOJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMi80zadyHLKAt-QELwJMLee8rPozBcotHtMyUQ50rEcTzW_eLHFbxIysVmuTfZaYEmUf1nKd3HdDN-fqX8Tw_b4mIOSv_1lOby1QSCbpxgpH5ispxt-K_YnyPKHFW471ddrx5_-y6IJwMC8qrsYZYetKv-L8akWNg7RE4Wg6mM2v8PXHli4Hd-rVpARzRnnDp&lib=M0klXLQOsKcIM4m86X8_CevqWUX6-vu4W";
+            // Request a string response from the provided URL.
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    // Display the first 500 characters of the response string.
+                    mDisplay.setText("Response is: "+ response.substring(0,500));
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    mDisplay.setText("That didn't work!");
+                }
+            });
+            // Add the request to the RequestQueue.
+            queue.add(stringRequest);
         }
     }
 
