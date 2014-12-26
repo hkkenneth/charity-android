@@ -17,6 +17,11 @@ public class EventsFactory {
 
         EventsStorage eventsStorage = new EventsStorage();
         String jsonString = eventsStorage.get();
+
+        if (jsonString.isEmpty()) {
+            return new ArrayList<Event>();
+        }
+
         try {
             EventsJsonWrapper eventsWrapper = gson.fromJson(jsonString, EventsJsonWrapper.class);
             return eventsWrapper.getEvents();

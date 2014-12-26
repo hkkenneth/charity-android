@@ -89,9 +89,7 @@ public class FeedbackActivity extends Activity {
         @Override
         public void onPageFinished(WebView view, String url) {
             if (url.endsWith(FeedbackActivity.FEEDBACK_FORM_URL_FINISH_SUFFIX)) {
-                // FIXME use the proper way to avoid creating many overlapping activities
-                Intent intent = new Intent(context, MainActivity.class);
-                startActivity(intent);
+                finish();
 
                 Toast.makeText(context, R.string.feedback_thankyou, Toast.LENGTH_SHORT).show();
             }

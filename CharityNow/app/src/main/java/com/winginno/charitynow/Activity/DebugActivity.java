@@ -53,7 +53,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MainActivity extends ActionBarActivity {
+public class DebugActivity extends ActionBarActivity {
 
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity {
      * Substitute you own sender ID here. This is the project number you got
      * from the API Console, as described in "Getting Started."
      */
-    String SENDER_ID = "THIS IS A PLACE HOLDER";
+    String SENDER_ID = "PLACE_HOLDER";
 
     /**
      * Tag used on log messages.
@@ -112,7 +112,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_debug, menu);
         return true;
     }
 
@@ -125,6 +125,20 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(context, "settings", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.action_feedback) {
+            Intent intent = new Intent(context, FeedbackActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_fetchApi) {
+            Toast.makeText(context, "fetch api", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.action_reloadList) {
+            Toast.makeText(context, "reload list", Toast.LENGTH_SHORT).show();
             return true;
         }
 

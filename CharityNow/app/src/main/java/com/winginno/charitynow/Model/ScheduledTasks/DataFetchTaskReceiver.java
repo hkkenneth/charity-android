@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -18,13 +20,21 @@ public class DataFetchTaskReceiver extends BroadcastReceiver {
 
     static final String TAG = "CharityNow";
 
+    private ArrayList<CallbackableActivityInterface> callbackObjects = new ArrayList<CallbackableActivityInterface>();
+
+    public void addCallback(CallbackableActivityInterface callbackObject) {
+        callbackObjects.add(callbackObject);
+    }
+
     @Override
     public void onReceive(Context arg0, Intent arg1) {
         Log.i(TAG, "DataFetchTaskReceiver onReceive()");
         Context appContext = ApplicationContextProvider.getContext();
 
         RequestQueue queue = Volley.newRequestQueue(appContext);
-        String url ="https://script.googleusercontent.com/a/macros/9gag.com/echo?user_content_key=5rB_V-GfLXa_VleYhJ17wJFhHzV7acDoGNlscBb4syuXE3rCLBGjRr4GTzZylfoFZxy1evj789I8hkXEF2MovbOq8QdZwM4wOJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMi80zadyHLKAt-QELwJMLee8rPozBcotHtMyUQ50rEcTzW_eLHFbxIysVmuTfZaYEmUf1nKd3HdDN-fqX8Tw_b4mIOSv_1lOby1QSCbpxgpH5ispxt-K_YnyPKHFW471ddrx5_-y6IJwMC8qrsYZYetKv-L8akWNg7RE4Wg6mM2v8PXHli4Hd-rVpARzRnnDp&lib=M0klXLQOsKcIM4m86X8_CevqWUX6-vu4W";
+        String url = "https://script.googleusercontent.com/macros/echo?user_content_key=bIWFEOUd4oSdepYQ5qw73rLRhfglQfdnm-wd7LX2Lv0Wsb--IkrqBdQ3nxWYKOP2PFYUGqKGupxcK40osoR36_Uq9flix-FbOJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMWojr9NvTBuBLhyHCd5hHa3GaoauzAMbF001i6RBWVb-ahx4EiaaV5fSJzo-0WxE6LvjOUOM7LAmIGuV_AbfFrj0-L2Dqk3c86HUp6oO_MiG62ZT_A2P50INU58kCY7cDOw0k5H1fFWRzb20fTPaEy6Q03jIrKSwFLrKcaEvqS_2I8DPeI7MCag&lib=M0klXLQOsKcIM4m86X8_CevqWUX6-vu4W";
+
+        final ArrayList<CallbackableActivityInterface> callbackObjs = callbackObjects;
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
@@ -33,6 +43,10 @@ public class DataFetchTaskReceiver extends BroadcastReceiver {
                 Log.i(TAG, "DataFetchTaskReceiver volley onResponse()");
                 EventsStorage eventsStorage = new EventsStorage();
                 eventsStorage.set(response);
+
+                for (CallbackableActivityInterface obj : callbackObjs) {
+                    obj.callback(CallbackableActivityInterface.CALLBACK_TYPE_DATA_FETCH);
+                }
             }
         }, new Response.ErrorListener() {
             @Override

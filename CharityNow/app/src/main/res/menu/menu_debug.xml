@@ -1,5 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/menu_main">
+	android:id="@+id/menu_debug">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" android:showAsAction="never" />
     <item android:id="@+id/action_feedback" android:title="@string/action_feedback"
@@ -8,8 +8,4 @@
         android:orderInCategory="102" android:showAsAction="never" />
     <item android:id="@+id/action_reloadList" android:title="@string/action_reloadList"
         android:orderInCategory="103" android:showAsAction="never" />
-    <item android:id="@+id/action_clearEvents" android:title="@string/action_clearEvents"
-        android:orderInCategory="104" android:showAsAction="never" />
-    <item android:id="@+id/action_fetchGcmToken" android:title="@string/action_fetchGcmToken"
-        android:orderInCategory="105" android:showAsAction="never" />
 </menu>
