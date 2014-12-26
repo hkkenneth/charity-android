@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.winginno.charitynow"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 20
         versionCode 1
         versionName "1.0"
@@ -27,4 +27,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.android.support:appcompat-v7:20.0.+'
+    compile "com.gc.materialdesign:library:1.0.0@aar"
 }

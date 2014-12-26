@@ -2,17 +2,24 @@
 <resources>
 
     <string name="app_name">Charity Now</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_feedback">Give Feedback</string>
+    <string name="action_settings">設定</string>
+    <string name="action_feedback">提供建議</string>
     <string name="action_fetchApi">Fetch API</string>
     <string name="action_reloadList">Reload list</string>
     <string name="action_clearEvents">Clear events</string>
     <string name="action_fetchGcmToken">Fetch GCM Token</string>
-    <string name="listview_placeholder">Loading information, please wait...</string>
-    <string name="listview_placeholder_no_events">No information, please return later.</string>
+    <string name="action_save">儲存</string>
+    <string name="listview_placeholder">查詢資料中，請稍候⋯⋯</string>
+    <string name="listview_placeholder_no_events">沒有資料，請稍後重試。</string>
     <string name="send">Send</string>
     <string name="clear">Clear</string>
-    <string name="feedback_thankyou">Thank you for your suggestions!</string>
+    <string name="feedback_thankyou">多謝你的建議！</string>
+    <string name="settings_text_flag_sale">收取賣旗日通知</string>
+    <string name="settings_option_area_kowloon">九龍</string>
+    <string name="settings_option_area_nt">新界及離島</string>
+    <string name="settings_option_area_hk">香港島</string>
+    <string name="settings_text_other_noti">收取慈善活動通知</string>
+    <string name="settings_option_other_noti">收到相關活動的網上資料</string>
+    <string name="settings_text_saved">設定已儲存</string>
 
 </resources>

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.winginno.charitynow" >
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"/>
+    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="19"/>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Added to avoid crash when app not started upon receiving noti -->
@@ -31,6 +31,10 @@
         <activity
             android:name="com.winginno.charitynow.FeedbackActivity"
             android:label="@string/action_feedback" >
+        </activity>
+        <activity
+            android:name="com.winginno.charitynow.SettingsActivity"
+            android:label="@string/action_settings" >
         </activity>
         <activity
             android:name="com.winginno.charitynow.DebugActivity"

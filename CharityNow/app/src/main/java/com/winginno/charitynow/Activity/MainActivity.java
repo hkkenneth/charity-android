@@ -73,7 +73,8 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(context, "settings", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
         if (id == R.id.action_feedback) {
