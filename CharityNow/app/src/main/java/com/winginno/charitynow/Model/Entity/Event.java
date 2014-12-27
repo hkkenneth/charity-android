@@ -2,7 +2,7 @@ package com.winginno.charitynow;
 
 import java.util.Date;
 
-public class Event {
+public class Event implements ListItemInterface {
     private Date Start_Date;
     private Date End_Date;
     private String Headline;
@@ -50,5 +50,9 @@ public class Event {
     public String getMembership()
     {
         return Membership;
+    }
+
+    public boolean isSectionHeader() {
+        return false;
     }
 }

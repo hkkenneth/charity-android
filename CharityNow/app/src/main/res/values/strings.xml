@@ -9,8 +9,10 @@
     <string name="action_clearEvents">Clear events</string>
     <string name="action_fetchGcmToken">Fetch GCM Token</string>
     <string name="action_save">儲存</string>
-    <string name="listview_placeholder">查詢資料中，請稍候⋯⋯</string>
-    <string name="listview_placeholder_no_events">沒有資料，請稍後重試。</string>
+    <string name="listview_text_placeholder">查詢資料中，請稍候⋯⋯</string>
+    <string name="listview_text_placeholder_no_events">沒有資料，請稍後重試。</string>
+    <string name="listview_text_current">最近賣旗活動</string>
+    <string name="listview_text_past">過去賣旗活動</string>
     <string name="send">Send</string>
     <string name="clear">Clear</string>
     <string name="feedback_thankyou">多謝你的建議！</string>

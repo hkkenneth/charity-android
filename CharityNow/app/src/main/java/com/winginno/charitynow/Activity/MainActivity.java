@@ -161,31 +161,44 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
         TextView textview = (TextView) findViewById(R.id.listview_placeholder);
         ArrayList<Event> events = EventsFactory.getEvents();
         if (events.isEmpty()) {
-            textview.setText(R.string.listview_placeholder_no_events);
+            textview.setText(R.string.listview_text_placeholder_no_events);
             textview.setVisibility(View.VISIBLE);
         } else {
             textview.setVisibility(View.GONE);
         }
 
-        final ArrayList<String> list = new ArrayList<String>();
+        ArrayList<ListItemInterface> listItems = new ArrayList<ListItemInterface>();
+        ArrayList<Event> pastEvents = new ArrayList<Event>();
+        ArrayList<Event> futureEvents = new ArrayList<Event>();
 
-        for (Event e : EventsFactory.getEvents()) {
-            if ((e.getStartDate() != null) && (e.getStartDate().before(new Date()))) {
+        for (Event e : events) {
+            if (e.getStartDate() == null) {
                 continue;
             }
-            Log.i(TAG, e.getName());
-            Log.i(TAG, e.getMembership());
 
-            list.add(e.getName());
+            if (e.getStartDate().before(new Date())) {
+                pastEvents.add(e);
+            } else {
+                futureEvents.add(e);
+            }
+        }
+        if (!futureEvents.isEmpty()) {
+            listItems.add(new SectionHeader(this.getString(R.string.listview_text_current)));
+            listItems.addAll(futureEvents);
+        }
+
+        if (!pastEvents.isEmpty()) {
+            listItems.add(new SectionHeader(this.getString(R.string.listview_text_past)));
+            listItems.addAll(pastEvents);
         }
 
         final ListView listview = (ListView) findViewById(R.id.event_listview);
 
-        final ArrayAdapter<Event> adapter = new EventViewAdapter(this, android.R.layout.simple_list_item_1, EventsFactory.getEvents());
+        final ArrayAdapter<ListItemInterface> adapter = new EventViewAdapter(this, android.R.layout.simple_list_item_1, listItems);
         listview.setAdapter(adapter);
 
         final Context activityContext = context;
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
 
           @Override
           public void onItemClick(AdapterView<?> parent, final View view,
@@ -194,8 +207,9 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
             Toast.makeText(activityContext, String.valueOf(id), Toast.LENGTH_SHORT).show();
           }
 
-        });
+        };
 
+        listview.setOnItemClickListener(listener);
         listview.requestLayout();
     }
 
