@@ -12,6 +12,8 @@
         android:protectionLevel="signature" />
     <uses-permission android:name="com.winginno.charitynow.permission.C2D_MESSAGE" />
 
+    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
+
     <application
         android:name=".ApplicationContextProvider"
         android:allowBackup="true"

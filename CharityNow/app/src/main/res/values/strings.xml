@@ -13,6 +13,11 @@
     <string name="listview_text_placeholder_no_events">沒有資料，請稍後重試。</string>
     <string name="listview_text_current">最近賣旗活動</string>
     <string name="listview_text_past">過去賣旗活動</string>
+    <string name="listview_text_membership">機構是以下組織成員：</string>
+    <string name="listview_text_membership_unknown">沒有資料</string>
+    <string name="listview_btn_web">開啟機構網頁</string>
+    <string name="listview_btn_recruit_web">開啟招募賣旗義工網頁</string>
+    <string name="listview_btn_recruit_phone">致電招募賣旗義工熱線</string>
     <string name="send">Send</string>
     <string name="clear">Clear</string>
     <string name="feedback_thankyou">多謝你的建議！</string>

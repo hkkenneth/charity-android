@@ -172,11 +172,11 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
         ArrayList<Event> futureEvents = new ArrayList<Event>();
 
         for (Event e : events) {
-            if (e.getStartDate() == null) {
+            if (e.getEndDate() == null) {
                 continue;
             }
 
-            if (e.getStartDate().before(new Date())) {
+            if (e.getEndDate().before(new Date())) {
                 pastEvents.add(e);
             } else {
                 futureEvents.add(e);
