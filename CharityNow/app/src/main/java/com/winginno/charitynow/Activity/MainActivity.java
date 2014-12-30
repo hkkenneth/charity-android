@@ -22,6 +22,8 @@ import android.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 public class MainActivity extends ActionBarActivity implements CallbackableActivityInterface {
 
@@ -32,12 +34,13 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
 
     Context context;
     Menu optionMenu;
+    Map<String, Integer> idToViewIndexMap;
 
     String regid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "on Create.");
+        Log.i(TAG, " MainActivity on Create.");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -46,6 +49,14 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
         // GcmTokenManager.initialize(this);
 
         initListView();
+
+        if (savedInstanceState != null) {
+            String eventId = savedInstanceState.getString("eventId");
+            Log.i(TAG, " MainActivity onCreate extra: " + eventId);
+            if ((eventId != null) && (!eventId.isEmpty())) {
+                scrollListViewToTaggedView(eventId);
+            }
+        }
 
         if (!DataFetchTask.isActive()) {
             DataFetchTask.create();
@@ -107,7 +118,16 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
     // You need to do the Play Services APK check here too.
     @Override
     protected void onResume() {
+        Log.i(TAG, " MainActivity on Resume.");
         super.onResume();
+
+        if ((getIntent() != null) && (getIntent().getExtras() != null)) {
+            String eventId = getIntent().getExtras().getString("eventId");
+            Log.i(TAG, " MainActivity onResume extra: " + eventId);
+            if ((eventId != null) && (!eventId.isEmpty())) {
+                scrollListViewToTaggedView(eventId);
+            }
+        }
 
         // GcmTokenManager.initialize(this);
 
@@ -157,6 +177,26 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
         }
     }
 
+    private void scrollListViewToIndex(int index) {
+        final ListView listview = (ListView) findViewById(R.id.event_listview);
+        listview.smoothScrollToPositionFromTop(index, 0, 300);
+    }
+
+    private void scrollListViewToTaggedView(String tag) {
+        final ListView listview = (ListView) findViewById(R.id.event_listview);
+        Integer index = idToViewIndexMap.get(tag);
+        if (index != null) {
+            View rowView = listview.getChildAt(index.intValue());
+            int h1 = listview.getHeight();
+            int h2 = 0;
+            if (rowView != null) {
+                h2 = rowView.getHeight();
+            }
+            // Log.i(TAG, "scrollListViewToTaggedView " + index.toString());
+            listview.smoothScrollToPositionFromTop(index.intValue(), h1/2 - h2/2, 300);
+        }
+    }
+
     private void fillListView() {
         TextView textview = (TextView) findViewById(R.id.listview_placeholder);
         ArrayList<Event> events = EventsFactory.getEvents();
@@ -170,6 +210,7 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
         ArrayList<ListItemInterface> listItems = new ArrayList<ListItemInterface>();
         ArrayList<Event> pastEvents = new ArrayList<Event>();
         ArrayList<Event> futureEvents = new ArrayList<Event>();
+        idToViewIndexMap = new HashMap<String, Integer>();
 
         for (Event e : events) {
             if (e.getEndDate() == null) {
@@ -182,14 +223,25 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
                 futureEvents.add(e);
             }
         }
+        int currentIndex = 0;
         if (!futureEvents.isEmpty()) {
             listItems.add(new SectionHeader(this.getString(R.string.listview_text_current)));
             listItems.addAll(futureEvents);
+            currentIndex += 1;
+            for (Event e : futureEvents) {
+                idToViewIndexMap.put(e.getId(), new Integer(currentIndex));
+                currentIndex += 1;
+            }
         }
 
         if (!pastEvents.isEmpty()) {
             listItems.add(new SectionHeader(this.getString(R.string.listview_text_past)));
             listItems.addAll(pastEvents);
+            currentIndex += 1;
+            for (Event e : pastEvents) {
+                idToViewIndexMap.put(e.getId(), new Integer(currentIndex));
+                currentIndex += 1;
+            }
         }
 
         final ListView listview = (ListView) findViewById(R.id.event_listview);
