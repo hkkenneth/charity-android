@@ -2,16 +2,8 @@ package com.winginno.charitynow;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.view.KeyEvent;
@@ -23,9 +15,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebChromeClient;
-
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class FeedbackActivity extends Activity {
 
