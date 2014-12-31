@@ -64,6 +64,8 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
         if (!NotificationTask.isActive()) {
             NotificationTask.create();
         }
+
+        Tracking.trackPageView("MainActivity");
     }
 
 

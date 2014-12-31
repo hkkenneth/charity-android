@@ -74,11 +74,13 @@ public class SettingsActivity extends Activity {
                 appSettings.setFlagSaleNotiNtEnabled(isChecked);
             }
         });
+        Tracking.trackPageView("SettingsActivity");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(TAG, "SettingsActivity on Resume.");
     }
 
     public void onClick(final View view) {

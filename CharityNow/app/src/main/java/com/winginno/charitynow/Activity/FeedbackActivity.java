@@ -55,11 +55,14 @@ public class FeedbackActivity extends Activity {
         });
 
         myWebView.loadUrl(FEEDBACK_FORM_URL);
+
+        Tracking.trackPageView("FeedbackActivity");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(TAG, "FeedbackActivity onResume.");
     }
 
     @Override

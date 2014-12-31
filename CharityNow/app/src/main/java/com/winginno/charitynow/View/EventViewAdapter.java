@@ -69,12 +69,13 @@ public class EventViewAdapter extends ArrayAdapter<ListItemInterface> {
             textViewLocation.setPaintFlags(textViewLocation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
             final Context appContext = context;
-
+            final String orgName = event.getName();
             if (!event.getRecruitPhone().isEmpty() && !event.isFinished()) {
                 final Intent callIntent = new Intent(Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse("tel:" + event.getRecruitPhone()));
                 buttonRecruitPhone.setOnClickListener(new OnClickListener() {
                     public void onClick(View v) {
+                        Tracking.trackEvent("ListView", "ButtonRecruitPhone", orgName);
                         appContext.startActivity(callIntent);
                     }
                 });
@@ -86,6 +87,7 @@ public class EventViewAdapter extends ArrayAdapter<ListItemInterface> {
                 openUrlIntent.setData(Uri.parse(event.getRecruitWeb()));
                 buttonRecruitWeb.setOnClickListener(new OnClickListener() {
                     public void onClick(View v) {
+                        Tracking.trackEvent("ListView", "ButtonRecruitWeb", orgName);
                         appContext.startActivity(openUrlIntent);
                     }
                 });
@@ -97,6 +99,7 @@ public class EventViewAdapter extends ArrayAdapter<ListItemInterface> {
                 openUrlIntent.setData(Uri.parse(event.getWebsiteUrl()));
                 buttonWeb.setOnClickListener(new OnClickListener() {
                     public void onClick(View v) {
+                        Tracking.trackEvent("ListView", "ButtonWeb", orgName);
                         appContext.startActivity(openUrlIntent);
                     }
                 });
