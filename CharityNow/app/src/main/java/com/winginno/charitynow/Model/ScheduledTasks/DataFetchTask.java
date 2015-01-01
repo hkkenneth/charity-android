@@ -11,7 +11,7 @@ import java.util.Calendar;
 public class DataFetchTask {
 
     static final String TAG = "CharityNow";
-    static final int TASK_FREQUENCY = 10000;
+    static final int TASK_FREQUENCY = 86400000;
     static final int REQUEST_CODE = 19881988;
 
     private static Intent getIntent()

@@ -18,6 +18,7 @@
     <string name="listview_btn_web">開啟機構網頁</string>
     <string name="listview_btn_recruit_web">開啟招募賣旗義工網頁</string>
     <string name="listview_btn_recruit_phone">致電招募賣旗義工熱線</string>
+    <string name="noti_text_suffix">賣旗機構</string>
     <string name="send">Send</string>
     <string name="clear">Clear</string>
     <string name="feedback_thankyou">多謝你的建議！</string>

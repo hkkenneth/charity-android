@@ -16,6 +16,8 @@ import android.widget.ListView;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 
+import java.lang.Runnable;
+
 import java.util.Date;
 
 import android.app.ActionBar;
@@ -186,7 +188,7 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
 
     private void scrollListViewToTaggedView(String tag) {
         final ListView listview = (ListView) findViewById(R.id.event_listview);
-        Integer index = idToViewIndexMap.get(tag);
+        final Integer index = idToViewIndexMap.get(tag);
         if (index != null) {
             View rowView = listview.getChildAt(index.intValue());
             int h1 = listview.getHeight();
@@ -194,8 +196,13 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
             if (rowView != null) {
                 h2 = rowView.getHeight();
             }
-            // Log.i(TAG, "scrollListViewToTaggedView " + index.toString());
-            listview.smoothScrollToPositionFromTop(index.intValue(), h1/2 - h2/2, 300);
+            final int h = h1/2 - h2/2;
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    listview.smoothScrollToPositionFromTop(index.intValue(), 0, 300);
+                    listview.setSelection(index.intValue());
+                }
+            });
         }
     }
 
@@ -250,20 +257,6 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
 
         final ArrayAdapter<ListItemInterface> adapter = new EventViewAdapter(this, android.R.layout.simple_list_item_1, listItems);
         listview.setAdapter(adapter);
-
-        final Context activityContext = context;
-        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
-
-          @Override
-          public void onItemClick(AdapterView<?> parent, final View view,
-              int position, long id) {
-
-            Toast.makeText(activityContext, String.valueOf(id), Toast.LENGTH_SHORT).show();
-          }
-
-        };
-
-        listview.setOnItemClickListener(listener);
         listview.requestLayout();
     }
 

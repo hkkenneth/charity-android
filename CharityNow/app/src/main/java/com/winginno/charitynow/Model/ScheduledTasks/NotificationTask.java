@@ -11,7 +11,7 @@ import java.util.Calendar;
 public class NotificationTask {
 
     static final String TAG = "CharityNow";
-    static final int TASK_FREQUENCY = 60000;
+    static final int TASK_FREQUENCY = 14400000;
     static final int REQUEST_CODE = 19881989;
 
     private static Intent getIntent()
