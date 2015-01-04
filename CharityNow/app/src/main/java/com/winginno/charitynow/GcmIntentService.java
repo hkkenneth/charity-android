@@ -29,6 +29,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.net.Uri;
 
+import java.util.Date;
+
 /**
  * This {@code IntentService} does the actual handling of the GCM message.
  * {@code GcmBroadcastReceiver} (a {@code WakefulBroadcastReceiver}) holds a
@@ -40,9 +42,8 @@ public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
 
     public static final String PROPERTY_TITLE = "title";
-    public static final String PROPERTY_ORGANIZATION_NAME = "orgName";
     public static final String PROPERTY_DESCRIPTION = "description";
-    public static final String PROPERTY_ORGANIZATION_LINK = "orgLink";
+    public static final String PROPERTY_LINK = "link";
 
 
 
@@ -88,7 +89,11 @@ public class GcmIntentService extends IntentService {
                 // }
                 // Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
-                sendNotification(extras);
+                SettingsStorage settingsStorage = new SettingsStorage();
+                Settings settings = settingsStorage.get();
+                if (settings.isOtherNotiEnabled()) {
+                    sendNotification(extras);
+                }
                 Log.i(TAG, "Received: " + extras.toString());
             }
         }
@@ -104,27 +109,24 @@ public class GcmIntentService extends IntentService {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-        //         new Intent(this, MainActivity.class), 0);
         Intent openUrlIntent = new Intent(Intent.ACTION_VIEW);
-        openUrlIntent.setData(Uri.parse((String) extras.get(PROPERTY_ORGANIZATION_LINK)));
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-            openUrlIntent, 0);
+        openUrlIntent.setData(Uri.parse((String) extras.get(PROPERTY_LINK)));
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, openUrlIntent, 0);
 
 
         String title = (String) extras.get(PROPERTY_TITLE);
-        String msg = (String) extras.get(PROPERTY_ORGANIZATION_NAME) + " " + (String) extras.get(PROPERTY_DESCRIPTION);
+        String msg = (String) extras.get(PROPERTY_DESCRIPTION);
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.ic_noti)
             .setContentTitle(title)
-            .setStyle(new NotificationCompat.BigTextStyle()
-            .bigText(msg))
             .setContentText(msg)
             .setAutoCancel(true);
 
+        Date now = new Date();
+        int notiId = (int) (now.getTime() % 1000000);
+
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify(notiId, mBuilder.build());
     }
 }
