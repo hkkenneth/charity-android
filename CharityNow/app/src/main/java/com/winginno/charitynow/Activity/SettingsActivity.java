@@ -88,6 +88,12 @@ public class SettingsActivity extends Activity {
             SettingsStorage settingsStorage = new SettingsStorage();
             settingsStorage.set(settings);
             Toast.makeText(context, R.string.settings_text_saved, Toast.LENGTH_SHORT).show();
+            SettingsApi settingsApi = new SettingsApi();
+            GcmTokenManager gcmTokenManager = new GcmTokenManager();
+            String gcmToken = gcmTokenManager.getRegistrationId();
+            if (!gcmToken.isEmpty()) {
+                settingsApi.save(gcmToken, "", settingsStorage.get());
+            }
             finish();
         }
     }

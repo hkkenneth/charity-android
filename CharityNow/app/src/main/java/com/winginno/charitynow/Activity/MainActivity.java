@@ -48,7 +48,7 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
 
         context = getApplicationContext();
 
-        // GcmTokenManager.initialize(this);
+        GcmTokenManager.initialize(this);
 
         initListView();
 
@@ -132,8 +132,6 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
                 scrollListViewToTaggedView(eventId);
             }
         }
-
-        // GcmTokenManager.initialize(this);
 
         if (!DataFetchTask.isActive()) {
             DataFetchTask.create();

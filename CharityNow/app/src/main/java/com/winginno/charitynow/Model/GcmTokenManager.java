@@ -103,8 +103,8 @@ public class GcmTokenManager {
                     }
                     Log.i(TAG, "About to call gcm.register");
                     String regid = gcm.register(SENDER_ID);
-                    msg = "Device registered, registration ID=" + regid;
-                    Log.i(TAG, msg);
+                    msg = regid;
+                    Log.i(TAG, "Device registered, registration ID=" + regid);
 
                     // You should send the registration ID to your server over HTTP, so it
                     // can use GCM/HTTP or CCS to send messages to your app.
@@ -118,8 +118,8 @@ public class GcmTokenManager {
                     GcmTokenStorage gcmTokenStorage = new GcmTokenStorage();
                     gcmTokenStorage.set(regid);
                 } catch (IOException ex) {
-                    msg = "IO Error :" + ex.getMessage();
-                    Log.e(TAG, msg);
+                    msg = "";
+                    Log.e(TAG, "IO Error :" + ex.getMessage());
                     // If there is an error, don't just keep trying to register.
                     // Require the user to click a button again, or perform
                     // exponential back-off.
@@ -130,6 +130,11 @@ public class GcmTokenManager {
             @Override
             protected void onPostExecute(String msg) {
                 Log.i(TAG, " onPostExecute " + msg);
+                if (!msg.isEmpty()) {
+                    SettingsApi settingsApi = new SettingsApi();
+                    SettingsStorage settingsStorage = new SettingsStorage();
+                    settingsApi.save(msg, "", settingsStorage.get());
+                }
             }
         }.execute(null, null, null);
     }
