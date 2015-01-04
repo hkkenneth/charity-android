@@ -97,24 +97,6 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
             startActivity(intent);
             return true;
         }
-        if (id == R.id.action_fetchApi) {
-            Toast.makeText(context, "fetch api", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-        if (id == R.id.action_reloadList) {
-            Toast.makeText(context, "reload list", Toast.LENGTH_SHORT).show();
-            fillListView();
-            return true;
-        }
-        if (id == R.id.action_clearEvents) {
-            EventsStorage eventsStorage = new EventsStorage();
-            eventsStorage.set("");
-            return true;
-        }
-        if (id == R.id.action_fetchGcmToken) {
-
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -147,25 +129,6 @@ public class MainActivity extends ActionBarActivity implements CallbackableActiv
             fillListView();
         }
     }
-
-    // public boolean onKeyDown(int keyCode, KeyEvent event) {
-    //     Log.i(TAG, " onKeyDown");
-    //     if (event.getAction() == KeyEvent.ACTION_DOWN) {
-    //         Log.i(TAG, "onKeyDown ACTION_DOWN");
-    //         switch(keyCode) {
-    //             case KeyEvent.KEYCODE_MENU:
-    //                 Log.i(TAG, "onKeyDown KEYCODE_MENU.");
-    //                 boolean result = optionMenu.performIdentifierAction(R.id.menu_main, 0);
-    //                 if (result) {
-    //                     Log.i(TAG, "onKeyDown performIdentifierAction ok.");
-    //                 } else {
-    //                     Log.i(TAG, "onKeyDown performIdentifierAction fail.");
-    //                 }
-    //                 return true;
-    //         }
-    //     }
-    //     return false;
-    // }
 
     private void initListView() {
         if (EventsFactory.getEvents().isEmpty()) {

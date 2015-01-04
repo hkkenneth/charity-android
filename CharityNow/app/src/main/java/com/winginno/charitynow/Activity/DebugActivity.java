@@ -134,11 +134,31 @@ public class DebugActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_fetchApi) {
-            Toast.makeText(context, "fetch api", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "cancel tasks", Toast.LENGTH_SHORT).show();
+            DataFetchTask.cancel();
+            NotificationTask.cancel();
             return true;
         }
         if (id == R.id.action_reloadList) {
             Toast.makeText(context, "reload list", Toast.LENGTH_SHORT).show();
+            NotificationTaskReceiver notificationTaskReceiver = new NotificationTaskReceiver();
+            notificationTaskReceiver.onReceive(null, null);
+            return true;
+        }
+        if (id == R.id.action_clearEvents) {
+            // EventsStorage eventsStorage = new EventsStorage();
+            // eventsStorage.set("");
+            GcmTokenStorage gcmTokenStorage = new GcmTokenStorage();
+            gcmTokenStorage.set("");
+            NotiHistoryStorage notiHistoryStorage = new NotiHistoryStorage();
+            notiHistoryStorage.clear();
+            Toast.makeText(context, "cleared events and token", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.action_fetchGcmToken) {
+            // scrollListViewToTaggedView("20150117A");
+            Toast.makeText(context, "fetch gcm token", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "token is " + GcmTokenManager.getRegistrationId());
             return true;
         }
 
@@ -255,36 +275,7 @@ public class DebugActivity extends ActionBarActivity {
                 }
             }.execute(null, null, null);
         } else if (view == findViewById(R.id.clear)) {
-            final ArrayList<String> list = new ArrayList<String>();
 
-            for (Event e : EventsFactory.getEvents()) {
-                if ((e.getStartDate() != null) && (e.getStartDate().before(new Date()))) {
-                    continue;
-                }
-                Log.i(TAG, e.getName());
-                Log.i(TAG, e.getMembership());
-
-                list.add(e.getName());
-            }
-
-            final ListView listview = (ListView) findViewById(R.id.event_listview);
-
-            final ArrayAdapter<Event> adapter = new EventViewAdapter(this, android.R.layout.simple_list_item_1, EventsFactory.getEvents());
-            listview.setAdapter(adapter);
-
-            final Context activityContext = context;
-            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-              @Override
-              public void onItemClick(AdapterView<?> parent, final View view,
-                  int position, long id) {
-
-                Toast.makeText(activityContext, "hi", Toast.LENGTH_SHORT).show();
-              }
-
-            });
-
-            listview.requestLayout();
         } else if (view == findViewById(R.id.btn_feedback_trigger)) {
             Intent intent = new Intent(context, FeedbackActivity.class);
             startActivity(intent);
@@ -447,4 +438,25 @@ public class DebugActivity extends ActionBarActivity {
       // Your implementation here.
         Log.i(TAG, "sendRegistrationIdToBackend");
     }
+
+    // public boolean onKeyDown(int keyCode, KeyEvent event) {
+    //     Log.i(TAG, " onKeyDown");
+    //     if (event.getAction() == KeyEvent.ACTION_DOWN) {
+    //         Log.i(TAG, "onKeyDown ACTION_DOWN");
+    //         switch(keyCode) {
+    //             case KeyEvent.KEYCODE_MENU:
+    //                 Log.i(TAG, "onKeyDown KEYCODE_MENU.");
+    //                 boolean result = optionMenu.performIdentifierAction(R.id.menu_main, 0);
+    //                 if (result) {
+    //                     Log.i(TAG, "onKeyDown performIdentifierAction ok.");
+    //                 } else {
+    //                     Log.i(TAG, "onKeyDown performIdentifierAction fail.");
+    //                 }
+    //                 return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+
+
 }
