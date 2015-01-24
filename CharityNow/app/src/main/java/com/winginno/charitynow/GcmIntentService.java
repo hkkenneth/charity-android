@@ -44,7 +44,8 @@ public class GcmIntentService extends IntentService {
     public static final String PROPERTY_TITLE = "title";
     public static final String PROPERTY_DESCRIPTION = "description";
     public static final String PROPERTY_LINK = "link";
-
+    public static final String PROPERTY_LOCAL_NOTI = "localNoti";
+    public static final String PROPERTY_FORCE_CLEAR_EVENT_CACHE = "forceClearEventCache";
 
 
     private NotificationManager mNotificationManager;
@@ -89,9 +90,18 @@ public class GcmIntentService extends IntentService {
                 // }
                 // Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
+                boolean forceClearEventCache = Boolean.parseBoolean((String) extras.get(PROPERTY_FORCE_CLEAR_EVENT_CACHE));
+                if (forceClearEventCache) {
+                    EventsStorage eventsStorage = new EventsStorage();
+                    eventsStorage.set("");
+                    Log.i(TAG, "Received: cleared event cache");
+                    return;
+                }
+
                 SettingsStorage settingsStorage = new SettingsStorage();
                 Settings settings = settingsStorage.get();
-                if (settings.isOtherNotiEnabled()) {
+                boolean callLocalNoti = Boolean.parseBoolean((String) extras.get(PROPERTY_LOCAL_NOTI));
+                if (settings.isOtherNotiEnabled() || callLocalNoti) {
                     sendNotification(extras);
                 }
                 Log.i(TAG, "Received: " + extras.toString());
@@ -106,6 +116,15 @@ public class GcmIntentService extends IntentService {
     // a GCM message.
     private void sendNotification(Bundle extras) {
         Log.i(TAG, "GcmIntentService.sendNotification");
+
+        boolean callLocalNoti = Boolean.parseBoolean((String) extras.get(PROPERTY_LOCAL_NOTI));
+        if (callLocalNoti) {
+            Log.i(TAG, "sendNotification() trigger local noti instead");
+            NotificationTaskReceiver notificationTaskReceiver = new NotificationTaskReceiver();
+            notificationTaskReceiver.onReceive(null, null);
+            return;
+        }
+
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
