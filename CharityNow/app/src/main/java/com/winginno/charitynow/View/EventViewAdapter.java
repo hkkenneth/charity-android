@@ -71,7 +71,7 @@ public class EventViewAdapter extends ArrayAdapter<ListItemInterface> {
             final Context appContext = context;
             final String orgName = event.getName();
             if (!event.getRecruitPhone().isEmpty() && !event.isFinished()) {
-                final Intent callIntent = new Intent(Intent.ACTION_CALL);
+                final Intent callIntent = new Intent(Intent.ACTION_VIEW);
                 callIntent.setData(Uri.parse("tel:" + event.getRecruitPhone()));
                 buttonRecruitPhone.setOnClickListener(new OnClickListener() {
                     public void onClick(View v) {
